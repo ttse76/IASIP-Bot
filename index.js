@@ -6,9 +6,9 @@ const{
 
 const client = new Discord.Client();
 const frank = ['suicide', 'pure', 'kids'];
-const charlie = ['bitch', 'crabpeople', 'wildcard'];
-const dennis = ['implication', 'lampshade'];
-const mac = ['plumber', 'science'];
+const charlie = ['bitch', 'crabpeople', 'wildcard', 'mom'];
+const dennis = ['implication', 'lampshade', 'tools'];
+const mac = ['plumber', 'science', 'god'];
 const characters = ['charlie', 'mac', 'dennis', 'frank'];
 
 client.login(token);
