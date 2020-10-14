@@ -8,6 +8,7 @@ const client = new Discord.Client();
 const frank = ['suicide', 'pure', 'kids'];
 const charlie = ['bitch', 'crabpeople', 'wildcard'];
 const dennis = ['implication', 'lampshade'];
+const mac = ['plumber', 'science'];
 
 client.login(token);
 
@@ -84,6 +85,21 @@ client.on('message', async message => {
 
             if(dennis.includes(quote)){
                 playQuote('dennis', quote);
+            }
+            else{
+                message.channel.send('Invalid selection');
+            }
+        }
+    }else if(command.startsWith('mac')){
+        if(!args.length){
+            var quote = mac[Math.floor(Math.random() * mac.length)];
+            playQuote('mac', quote);
+        }
+        else{
+            var quote = args[0].toLowerCase();
+
+            if(mac.includes(quote)){
+                playQuote('mac', quote);
             }
             else{
                 message.channel.send('Invalid selection');
