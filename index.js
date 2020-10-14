@@ -9,6 +9,7 @@ const frank = ['suicide', 'pure', 'kids'];
 const charlie = ['bitch', 'crabpeople', 'wildcard'];
 const dennis = ['implication', 'lampshade'];
 const mac = ['plumber', 'science'];
+const characters = ['charlie', 'mac', 'dennis', 'frank'];
 
 client.login(token);
 
@@ -29,6 +30,10 @@ client.on('message', async message => {
 
     const args = message.content.slice(prefix.length).trim().split(' ');
     const command = args.shift().toLowerCase();
+    if(command.startsWith('help')){
+        generateHelp();
+        return;
+    }
     const voiceChannel = message.member.voice.channel;
 
     if(!voiceChannel){
@@ -123,5 +128,64 @@ client.on('message', async message => {
         }catch(err){
             return message.channel.send(err);
         }
+    }
+
+    function generateHelp(){
+        var out = "     'It's Always Sunny in Philadelphia' Soundboard\nBy Tim Tse\n\n";
+        out += 'HOW TO USE:\n';
+        out += '--<character> - Play an audio\n';
+        out += '--<character> <file> - Play a specific file (extension not required)\n\n';
+        out += 'CURRENT COMMANDS\n';
+        for(index in characters){
+            var charac = characters[index];
+            if(charac.startsWith('charlie')){
+                out += '--charlie\n';
+                var flag = false;
+                for(charlieCmd in charlie){
+                    if(flag){
+                        out += ', ';
+                    }
+                    out += charlie[charlieCmd];
+                    flag = true;
+                }
+                out += '\n\n';
+            }
+            else if(charac.startsWith('dennis')){
+                out += '--dennis\n';
+                var flag = false;
+                for(dennisCmd in dennis){
+                    if(flag){
+                        out += ', ';
+                    }
+                    out += dennis[dennisCmd];
+                    flag = true;
+                }
+                out += '\n\n';
+            }
+            else if(charac.startsWith('frank')){
+                out += '--frank\n';
+                var flag = false;
+                for(frankCmd in frank){
+                    if(flag){
+                        out += ', ';
+                    }
+                    out += frank[frankCmd];
+                    flag = true;
+                }
+                out += '\n\n';
+            }else if(charac.startsWith('mac')){
+                out += '--mac\n';
+                var flag = false;
+                for(macCmd in mac){
+                    if(flag){
+                        out += ', ';
+                    }
+                    out += mac[macCmd];
+                    flag = true;
+                }
+                out += '\n\n';
+            }
+        }
+        message.channel.send(out);
     }
 });
