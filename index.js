@@ -6,6 +6,7 @@ const{
 
 const client = new Discord.Client();
 const frank = ['suicide', 'pure', 'kids'];
+const charlie = ['bitch', 'crabpeople', 'wildcard'];
 
 client.login(token);
 
@@ -27,15 +28,18 @@ client.on('message', async message => {
     const args = message.content.slice(prefix.length).trim().split(' ');
     const command = args.shift().toLowerCase();
     const voiceChannel = message.member.voice.channel;
+
     if(!voiceChannel){
         return message.channel.send("You need to be in a voice channel");
     }
+
     const permissions = voiceChannel.permissionsFor(message.client.user);
     if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
         return message.channel.send(
             "Bot requires permissions to join and speak in your voice channel"
         );
     }
+
     if(!message.content.startsWith(prefix)) return;
 
     if(command.startsWith('frank')){
@@ -45,6 +49,7 @@ client.on('message', async message => {
         }
         else{
             var quote = args[0].toLowerCase();
+
             if(frank.includes(quote)){
                 playQuote('frank', quote);
             }
@@ -52,6 +57,23 @@ client.on('message', async message => {
                 message.channel.send('Invalid selection');
             }
         }
+    }else if(command.startsWith('charlie')){
+        if(!args.length){
+            var quote = charlie[Math.floor(Math.random() * frank.length)];
+            playQuote('charlie', quote);
+        }
+        else{
+            var quote = args[0].toLowerCase();
+            console.log(quote);
+
+            if(charlie.includes(quote)){
+                playQuote('charlie', quote);
+            }
+            else{
+                message.channel.send('Invalid selection');
+            }
+        }
+
     }else{
         message.channel.send('character not valid');
     }
