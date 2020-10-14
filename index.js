@@ -7,6 +7,7 @@ const{
 const client = new Discord.Client();
 const frank = ['suicide', 'pure', 'kids'];
 const charlie = ['bitch', 'crabpeople', 'wildcard'];
+const dennis = ['implication', 'lampshade'];
 
 client.login(token);
 
@@ -59,12 +60,11 @@ client.on('message', async message => {
         }
     }else if(command.startsWith('charlie')){
         if(!args.length){
-            var quote = charlie[Math.floor(Math.random() * frank.length)];
+            var quote = charlie[Math.floor(Math.random() * charlie.length)];
             playQuote('charlie', quote);
         }
         else{
             var quote = args[0].toLowerCase();
-            console.log(quote);
 
             if(charlie.includes(quote)){
                 playQuote('charlie', quote);
@@ -74,8 +74,23 @@ client.on('message', async message => {
             }
         }
 
+    }else if(command.startsWith('dennis')){
+        if(!args.length){
+            var quote = dennis[Math.floor(Math.random() * dennis.length)];
+            playQuote('dennis', quote);
+        }
+        else{
+            var quote = args[0].toLowerCase();
+
+            if(dennis.includes(quote)){
+                playQuote('dennis', quote);
+            }
+            else{
+                message.channel.send('Invalid selection');
+            }
+        }
     }else{
-        message.channel.send('character not valid');
+        message.channel.send('command not valid');
     }
 
     function playQuote(character, quote){
