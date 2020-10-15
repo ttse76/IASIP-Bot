@@ -5,26 +5,28 @@
         "mac",
         "charlie"
     ],
-    "frank":[
-        "suicide", 
-        "pure", 
-        "kids",
-        "nword"
-    ],
-    "charlie":[
-        "bitch", 
-        "crabpeople", 
-        "wildcard", 
-        "mom"
-    ],
-    "mac":[
-        "plumber", 
-        "science", 
-        "god"
-    ],
-    "dennis":[
-        "implication", 
-        "lampshade", 
-        "tools"
-    ]
+    "audio":{
+        "frank":[
+            "suicide", 
+            "pure", 
+            "kids",
+            "nword"
+        ],
+        "charlie":[
+            "bitch", 
+            "crabpeople", 
+            "wildcard", 
+            "mom"
+        ],
+        "mac":[
+            "plumber", 
+            "science", 
+            "god"
+        ],
+        "dennis":[
+            "implication", 
+            "lampshade", 
+            "tools"
+        ]
+    }
 }

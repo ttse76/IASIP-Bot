@@ -5,19 +5,32 @@ const{
 } = require('./config.json');
 
 const client = new Discord.Client();
-const{
-    characters,
-    frank,
-    charlie,
-    mac,
-    dennis
-} = require('./info.json');
+const info = require('./info.json');
+var characters = [];
+var audioFiles = new Map();
 
 client.login(token);
 
 client.once('ready', () => {
+    try{
+        proccessJSON();
+    }catch(err){
+        console.log(err);
+        return;
+    }
     console.log('Ready!');
 });
+
+function proccessJSON(){
+    console.log('Processing audio info...');
+    characters = info.characters;
+    let audioInfo = info.audio;
+    for(let i = 0; i < characters.length; i++){
+        let char = characters[i];
+        audioFiles.set(char, audioInfo[char]);
+    }
+    return;
+}
 
 client.once('reconnecting', () => {
     console.log('Reconnecting...');
@@ -30,8 +43,13 @@ client.once('disconnecting', () => {
 client.on('message', async message => {
     if(message.author.bot) return;
     if(!message.content.startsWith(prefix)) return;
-    const args = message.content.slice(prefix.length).trim().split(' ');
-    const command = args.shift().toLowerCase();
+    const messageArr = message.content.slice(prefix.length).trim().split(' ');
+    const command = messageArr.shift().toLowerCase();
+    var arg = '';
+    if(messageArr.length > 0){
+        arg = messageArr[0];
+    }
+    
     if(command.startsWith('help')){
         generateHelp();
         return;
@@ -48,77 +66,34 @@ client.on('message', async message => {
             "Bot requires permissions to join and speak in your voice channel"
         );
     }
+    if(verifyRequest(command, arg)){
+        playQuote(command, arg);
+        return;
+    }
+    else{
+        return message.channel.send('Command not valid');
+    }
 
-    if(!message.content.startsWith(prefix)) return;
-
-    if(command.startsWith('frank')){
-        if(!args.length){
-            var quote = frank[Math.floor(Math.random() * frank.length)];
-            playQuote('frank', quote);
+    function verifyRequest(command, arg){
+        if(!characters.includes(command)){
+            return false;
         }
-        else{
-            var quote = args[0].toLowerCase();
-
-            if(frank.includes(quote)){
-                playQuote('frank', quote);
-            }
-            else{
-                message.channel.send('Invalid selection');
-            }
+        let charAudio = audioFiles.get(command);
+        if(arg && !charAudio.includes(arg)){
+            return false;
         }
-    }else if(command.startsWith('charlie')){
-        if(!args.length){
-            var quote = charlie[Math.floor(Math.random() * charlie.length)];
-            playQuote('charlie', quote);
-        }
-        else{
-            var quote = args[0].toLowerCase();
-
-            if(charlie.includes(quote)){
-                playQuote('charlie', quote);
-            }
-            else{
-                message.channel.send('Invalid selection');
-            }
-        }
-
-    }else if(command.startsWith('dennis')){
-        if(!args.length){
-            var quote = dennis[Math.floor(Math.random() * dennis.length)];
-            playQuote('dennis', quote);
-        }
-        else{
-            var quote = args[0].toLowerCase();
-
-            if(dennis.includes(quote)){
-                playQuote('dennis', quote);
-            }
-            else{
-                message.channel.send('Invalid selection');
-            }
-        }
-    }else if(command.startsWith('mac')){
-        if(!args.length){
-            var quote = mac[Math.floor(Math.random() * mac.length)];
-            playQuote('mac', quote);
-        }
-        else{
-            var quote = args[0].toLowerCase();
-
-            if(mac.includes(quote)){
-                playQuote('mac', quote);
-            }
-            else{
-                message.channel.send('Invalid selection');
-            }
-        }
-    }else{
-        message.channel.send('command not valid');
+        return true;
     }
 
     function playQuote(character, quote){
-        var quoteFile = 'audio/' + character + '/' + quote + '.mp3';
-        
+        var quoteFile = 'audio/' + character;
+        if(arg){
+            quoteFile += '/' + quote + '.mp3';
+        }else{
+            let quoteFiles = audioFiles.get(character);
+            let selected = quoteFiles[Math.floor(Math.random() * quoteFiles.length)]
+            quoteFile += '/' + selected + '.mp3'; 
+        }
         try{
             voiceChannel.join().then(connection => {
                 connection.play(quoteFile).on('finish', () => {
@@ -138,55 +113,19 @@ client.on('message', async message => {
         out += '--<character> - Play an audio\n';
         out += '--<character> <file> - Play a specific file (extension not required)\n\n';
         out += 'CURRENT COMMANDS\n';
-        for(index in characters){
-            var charac = characters[index];
-            if(charac.startsWith('charlie')){
-                out += '--charlie\n';
-                var flag = false;
-                for(charlieCmd in charlie){
-                    if(flag){
-                        out += ', ';
-                    }
-                    out += charlie[charlieCmd];
-                    flag = true;
+        for(let i in characters){
+            let char = characters[i];
+            let charArr = audioFiles.get(char);
+            out += '--' + char + '\n';
+            let flag = true;
+            for(let j in charArr){
+                if(!flag){
+                    out += ', ';
                 }
-                out += '\n\n';
+                out += charArr[j];
+                flag = false;
             }
-            else if(charac.startsWith('dennis')){
-                out += '--dennis\n';
-                var flag = false;
-                for(dennisCmd in dennis){
-                    if(flag){
-                        out += ', ';
-                    }
-                    out += dennis[dennisCmd];
-                    flag = true;
-                }
-                out += '\n\n';
-            }
-            else if(charac.startsWith('frank')){
-                out += '--frank\n';
-                var flag = false;
-                for(frankCmd in frank){
-                    if(flag){
-                        out += ', ';
-                    }
-                    out += frank[frankCmd];
-                    flag = true;
-                }
-                out += '\n\n';
-            }else if(charac.startsWith('mac')){
-                out += '--mac\n';
-                var flag = false;
-                for(macCmd in mac){
-                    if(flag){
-                        out += ', ';
-                    }
-                    out += mac[macCmd];
-                    flag = true;
-                }
-                out += '\n\n';
-            }
+            out += '\n\n'
         }
         message.channel.send(out);
     }
