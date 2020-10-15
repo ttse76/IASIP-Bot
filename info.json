@@ -1,0 +1,29 @@
+{
+    "characters":[
+        "dennis",
+        "frank",
+        "mac",
+        "charlie"
+    ],
+    "frank":[
+        "suicide", 
+        "pure", 
+        "kids"
+    ],
+    "charlie":[
+        "bitch", 
+        "crabpeople", 
+        "wildcard", 
+        "mom"
+    ],
+    "mac":[
+        "plumber", 
+        "science", 
+        "god"
+    ],
+    "dennis":[
+        "implication", 
+        "lampshade", 
+        "tools"
+    ]
+}

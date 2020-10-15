@@ -5,11 +5,13 @@ const{
 } = require('./config.json');
 
 const client = new Discord.Client();
-const frank = ['suicide', 'pure', 'kids'];
-const charlie = ['bitch', 'crabpeople', 'wildcard', 'mom'];
-const dennis = ['implication', 'lampshade', 'tools'];
-const mac = ['plumber', 'science', 'god'];
-const characters = ['charlie', 'mac', 'dennis', 'frank'];
+const{
+    characters,
+    frank,
+    charlie,
+    mac,
+    dennis
+} = require('./info.json');
 
 client.login(token);
 
@@ -131,7 +133,7 @@ client.on('message', async message => {
     }
 
     function generateHelp(){
-        var out = "     'It's Always Sunny in Philadelphia' Soundboard\nBy Tim Tse\n\n";
+        var out = "     'It's Always Sunny in Philadelphia' Soundboard\n";
         out += 'HOW TO USE:\n';
         out += '--<character> - Play an audio\n';
         out += '--<character> <file> - Play a specific file (extension not required)\n\n';
