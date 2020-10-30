@@ -46,14 +46,14 @@ client.on('message', async message => {
     if(message.author.bot) return;
     if(!message.content.startsWith(prefix)) return;
     const voiceChannel = message.member.voice.channel;
+    if(!voiceChannel){
+        return message.channel.send("You need to be in a voice channel");
+    }
     const permissions = voiceChannel.permissionsFor(message.client.user);
     if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
         return message.channel.send(
             "Bot requires permissions to join and speak in your voice channel"
         );
-    }
-    if(!voiceChannel){
-        return message.channel.send("You need to be in a voice channel");
     }
 
     const messageArr = message.content.slice(prefix.length).trim().split(' ');
