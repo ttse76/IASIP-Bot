@@ -41,8 +41,21 @@ client.once('disconnecting', () => {
 });
 
 client.on('message', async message => {
+
+    //Checking requirements
     if(message.author.bot) return;
     if(!message.content.startsWith(prefix)) return;
+    const voiceChannel = message.member.voice.channel;
+    const permissions = voiceChannel.permissionsFor(message.client.user);
+    if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
+        return message.channel.send(
+            "Bot requires permissions to join and speak in your voice channel"
+        );
+    }
+    if(!voiceChannel){
+        return message.channel.send("You need to be in a voice channel");
+    }
+
     const messageArr = message.content.slice(prefix.length).trim().split(' ');
     const command = messageArr.shift().toLowerCase();
     var arg = '';
@@ -50,30 +63,21 @@ client.on('message', async message => {
         arg = messageArr[0];
     }
     
-    if(command.startsWith('help')){
-        generateHelp();
-        return;
-    }
-    const voiceChannel = message.member.voice.channel;
-
-    if(!voiceChannel){
-        return message.channel.send("You need to be in a voice channel");
-    }
-
-    const permissions = voiceChannel.permissionsFor(message.client.user);
-    if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
-        return message.channel.send(
-            "Bot requires permissions to join and speak in your voice channel"
-        );
-    }
-    if(verifyRequest(command, arg)){
-        playQuote(command, arg);
-        return;
-    }
-    else{
-        return message.channel.send('Command not valid');
+    switch(command){
+        case "help":
+            generateHelp();
+            break;
+        default:
+            if(verifyRequest(command, arg)){
+                playQuote(command, arg);
+                return;
+            }
+            else{
+                return message.channel.send('Command not valid');
+            }   
     }
 
+    // Helper functions
     function verifyRequest(command, arg){
         if(!characters.includes(command)){
             return false;

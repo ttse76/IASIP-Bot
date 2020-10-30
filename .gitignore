@@ -1,7 +1,5 @@
-/audio
 /node_modules
-package.json
 config.json
-ffmpeg.exe
-iasip-bot.code-workspace
 iasip.js.o
+package.json.o
+package-lock.json
